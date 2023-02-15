@@ -4,10 +4,7 @@ import { User } from "../../../../types/User";
 export const usersResolvers = {
   Query: {
     users: async () => await Users.find(),
-    getUser: async (_: any, args: User) => {
-      const user = await Users.findById(args.id);
-      return user;
-    },
+    getUser: async (_: any, args: User) => await Users.findById(args.id),
   },
 
   Mutation: {
