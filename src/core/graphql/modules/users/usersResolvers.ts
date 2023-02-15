@@ -15,7 +15,7 @@ export const usersResolvers = {
       const newUser = new Users(args.data);
       const user = await Users.find({ email: args.data.email });
 
-      if (user) {
+      if (!!user.length) {
         throw new Error(`Email: ${args.data.email} already in use`);
       }
 

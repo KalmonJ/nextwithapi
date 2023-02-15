@@ -5,3 +5,7 @@ export interface User {
   password: string;
   profileImage: string | null;
 }
+
+export type Login = {
+  data: Pick<User, "email" | "password">;
+};

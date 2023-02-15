@@ -6,7 +6,7 @@ type Login {
   token: String!
 }
 
-type inputLogin {
+input inputLogin {
   email: String!
   password: String!
 }
