@@ -1,19 +1,26 @@
-import Users from "core/models/Users";
-import { User } from "../../../../types/User";
+import { Resolvers } from "__generated__/resolvers-types";
 
-export const usersResolvers = {
+export const usersResolvers: Resolvers = {
   Query: {
-    users: async () => await Users.find(),
-    getUser: async (_: any, args: User) => await Users.findById(args.id),
+    users: async (_, args, ctx) => await ctx.users.find(),
+    getUser: async (_, args, ctx) => {
+      const user = await ctx.users.findById(args.id);
+
+      if (!user) {
+        throw new Error("User not found!");
+      }
+
+      return user;
+    },
   },
 
   Mutation: {
-    createUser: async (_: any, args: { data: User }) => {
-      const newUser = new Users(args.data);
-      const user = await Users.find({ email: args.data.email });
+    createUser: async (_, args, ctx) => {
+      const newUser = new ctx.users(args.data);
+      const user = await ctx.users.find({ email: args.data!.email });
 
       if (!!user.length) {
-        throw new Error(`Email: ${args.data.email} already in use`);
+        throw new Error(`Email: ${args.data!.email} already in use`);
       }
 
       newUser.save();

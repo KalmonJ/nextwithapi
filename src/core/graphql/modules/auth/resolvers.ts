@@ -1,13 +1,12 @@
-import Users from "core/models/Users";
 import bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
-import { Login } from "types/User";
+import { Resolvers } from "__generated__/resolvers-types";
 
-export const loginResolvers = {
+export const loginResolvers: Resolvers = {
   Query: {
-    login: async (_: any, args: Login) => {
-      const [user] = await Users.find({ email: args.data.email });
-      const match = await bcrypt.compare(args.data.password, user.password);
+    login: async (_, args, ctx) => {
+      const [user] = await ctx.users.find({ email: args.data!.email });
+      const match = await bcrypt.compare(args.data!.password, user.password);
       if (match) {
         const token = jwt.sign(
           {

@@ -1,18 +1,17 @@
-import Products from "core/models/Products";
+import { Resolvers } from "__generated__/resolvers-types";
 
-export const productResolvers = {
+export const productResolvers: Resolvers = {
   Query: {
-    products: async () => await Products.find(),
-    getProduct: async (_: any, args: any) => {
-      const product = await Products.findById(args.id);
-      console.log(_, "???");
+    products: async (_, args, ctx) => await ctx.products.find(),
+    getProduct: async (_, args, ctx) => {
+      const product = await ctx.products.findById(args.id);
       return product;
     },
   },
 
   Mutation: {
-    createProduct: (_: any, args: any) => {
-      const product = new Products(args.data);
+    createProduct: (_, args, ctx) => {
+      const product = new ctx.products(args.data);
       product.save();
       return product;
     },
