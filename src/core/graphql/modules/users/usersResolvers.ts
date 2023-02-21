@@ -2,7 +2,10 @@ import { Resolvers } from "__generated__/resolvers-types";
 
 export const usersResolvers: Resolvers = {
   Query: {
-    users: async (_, args, ctx) => await ctx.users.find(),
+    users: async (_, __, ctx) => {
+      if (!ctx.authUser) throw new Error("Unauthorized");
+      return await ctx.users.find();
+    },
     getUser: async (_, args, ctx) => {
       const user = await ctx.users.findById(args.id);
 

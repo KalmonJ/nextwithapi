@@ -28,3 +28,6 @@ export const loginResolvers: Resolvers = {
     },
   },
 };
+
+export const getSession = (authToken: string): jwt.JwtPayload =>
+  jwt.verify(authToken, process.env.JWT_SECRET || "") as jwt.JwtPayload;

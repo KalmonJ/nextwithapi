@@ -2,7 +2,7 @@ import { Resolvers } from "__generated__/resolvers-types";
 
 export const productResolvers: Resolvers = {
   Query: {
-    products: async (_, args, ctx) => await ctx.products.find(),
+    products: async (_, __, ctx) => await ctx.products.find(),
     getProduct: async (_, args, ctx) => {
       const product = await ctx.products.findById(args.id);
       return product;
