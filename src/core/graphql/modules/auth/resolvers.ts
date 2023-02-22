@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
+import cookie from "cookie";
 import { Resolvers } from "__generated__/resolvers-types";
+import { GraphQLError } from "graphql";
 
 export const loginResolvers: Resolvers = {
   Query: {
@@ -21,10 +23,22 @@ export const loginResolvers: Resolvers = {
           process.env.JWT_SECRET as string
         );
 
+        ctx.res.setHeader(
+          "set-cookie",
+          cookie.serialize("access", token, {
+            maxAge: 60 * 60 * 24, // 1 day
+            httpOnly: true,
+          })
+        );
+
         return { token };
       }
 
-      throw new Error("email or password invalid!");
+      throw new GraphQLError("email or password invalid!");
+    },
+
+    getSession: (_, __, ctx) => {
+      if (ctx.authUser) return ctx.authUser;
     },
   },
 };

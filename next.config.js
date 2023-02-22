@@ -5,6 +5,7 @@ const nextConfig = {
   },
   env: {
     JWT_SECRET: process.env.JWT_SECRET,
+    API_URL: process.env.API_URL,
   },
 };
 

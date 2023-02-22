@@ -1,4 +1,5 @@
-import dynamic from "next/dynamic";
+import { useQuery, gql } from "@apollo/client";
+import styled from "styled-components";
 
 export const Teste = () => {
   return <></>;

@@ -1,8 +1,13 @@
 type Query {
   login(data: inputLogin): Login!
+  getSession(data: inputGetSession): User!
 }
 
 type Login {
+  token: String!
+}
+
+input inputGetSession {
   token: String!
 }
 

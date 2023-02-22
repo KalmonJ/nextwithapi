@@ -1,4 +1,5 @@
 import { Resolvers } from "__generated__/resolvers-types";
+import { GraphQLError } from "graphql";
 
 export const productResolvers: Resolvers = {
   Query: {
@@ -11,6 +12,7 @@ export const productResolvers: Resolvers = {
 
   Mutation: {
     createProduct: (_, args, ctx) => {
+      if (ctx.authUser) throw new GraphQLError("Unauthorized");
       const product = new ctx.products(args.data);
       product.save();
       return product;

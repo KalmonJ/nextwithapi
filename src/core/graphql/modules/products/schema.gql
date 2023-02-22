@@ -8,7 +8,7 @@ type Product {
 }
 
 type Query {
-  products: [Product!]!
+  products(offset: Int, limit: Int): [Product!]!
   getProduct(id: String!): Product!
 }
 

@@ -1,5 +1,5 @@
-import { Context } from "../pages/api/graphql";
-import { BaseContext } from "@apollo/server";
+import { GraphQLResolveInfo } from "graphql";
+import { Context } from "pages/api/graphql";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -65,6 +65,7 @@ export type Product = {
 export type Query = {
   __typename?: "Query";
   getProduct: Product;
+  getSession: User;
   getUser: User;
   login: Login;
   products: Array<Product>;
@@ -75,12 +76,21 @@ export type QueryGetProductArgs = {
   id: Scalars["String"];
 };
 
+export type QueryGetSessionArgs = {
+  data?: InputMaybe<InputGetSession>;
+};
+
 export type QueryGetUserArgs = {
   id?: InputMaybe<Scalars["ID"]>;
 };
 
 export type QueryLoginArgs = {
   data?: InputMaybe<InputLogin>;
+};
+
+export type QueryProductsArgs = {
+  limit?: InputMaybe<Scalars["Int"]>;
+  offset?: InputMaybe<Scalars["Int"]>;
 };
 
 export type User = {
@@ -97,6 +107,10 @@ export type UserInput = {
   password: Scalars["String"];
   profileImage?: InputMaybe<Scalars["String"]>;
   username: Scalars["String"];
+};
+
+export type InputGetSession = {
+  token: Scalars["String"];
 };
 
 export type InputLogin = {
@@ -128,21 +142,21 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: BaseContext
+  info: GraphQLResolveInfo
 ) => Promise<TResult> | TResult;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: BaseContext
+  info: GraphQLResolveInfo
 ) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: BaseContext
+  info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
 export interface SubscriptionSubscriberObject<
@@ -196,13 +210,13 @@ export type SubscriptionResolver<
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
-  info: BaseContext
+  info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
 export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
   obj: T,
   context: TContext,
-  info: BaseContext
+  info: GraphQLResolveInfo
 ) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
@@ -217,7 +231,7 @@ export type DirectiveResolverFn<
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: BaseContext
+  info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
@@ -225,6 +239,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
   Login: ResolverTypeWrapper<Login>;
   Mutation: ResolverTypeWrapper<{}>;
   Product: ResolverTypeWrapper<Product>;
@@ -232,6 +247,7 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars["String"]>;
   User: ResolverTypeWrapper<User>;
   UserInput: UserInput;
+  inputGetSession: InputGetSession;
   inputLogin: InputLogin;
   inputProduct: InputProduct;
 }>;
@@ -241,6 +257,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"];
   Float: Scalars["Float"];
   ID: Scalars["ID"];
+  Int: Scalars["Int"];
   Login: Login;
   Mutation: {};
   Product: Product;
@@ -248,6 +265,7 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars["String"];
   User: User;
   UserInput: UserInput;
+  inputGetSession: InputGetSession;
   inputLogin: InputLogin;
   inputProduct: InputProduct;
 }>;
@@ -313,6 +331,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetProductArgs, "id">
   >;
+  getSession?: Resolver<
+    ResolversTypes["User"],
+    ParentType,
+    ContextType,
+    Partial<QueryGetSessionArgs>
+  >;
   getUser?: Resolver<
     ResolversTypes["User"],
     ParentType,
@@ -328,7 +352,8 @@ export type QueryResolvers<
   products?: Resolver<
     Array<ResolversTypes["Product"]>,
     ParentType,
-    ContextType
+    ContextType,
+    Partial<QueryProductsArgs>
   >;
   users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 }>;

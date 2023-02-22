@@ -2,6 +2,7 @@ import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { dbConnection } from "core/config/dbConnect";
 import { getSession } from "core/graphql/modules/auth/resolvers";
+import { NextApiResponse } from "next";
 import typeDefs from "core/graphql/modules/typeDefs";
 import resolvers from "core/graphql/modules/resolvers";
 import Users from "core/models/Users";
@@ -11,6 +12,7 @@ export type Context = {
   users: typeof Users;
   products: typeof Products;
   authUser?: any;
+  res: NextApiResponse;
 };
 
 const apolloServer = new ApolloServer<Context>({
@@ -24,7 +26,7 @@ dbConnection.then(() => {
 });
 
 export default startServerAndCreateNextHandler(apolloServer, {
-  context: async (req, _) => {
+  context: async (req, res) => {
     const token: string = req.headers.authorization || "";
 
     try {
@@ -34,9 +36,10 @@ export default startServerAndCreateNextHandler(apolloServer, {
         users: Users,
         products: Products,
         authUser: data,
+        res,
       };
     } catch (error) {
-      return { users: Users, products: Products };
+      return { users: Users, products: Products, res };
     }
   },
 });

@@ -1,16 +1,19 @@
+import { GraphQLError } from "graphql";
 import { Resolvers } from "__generated__/resolvers-types";
 
 export const usersResolvers: Resolvers = {
   Query: {
     users: async (_, __, ctx) => {
-      if (!ctx.authUser) throw new Error("Unauthorized");
+      if (!ctx.authUser) throw new GraphQLError("Unauthorized");
       return await ctx.users.find();
     },
     getUser: async (_, args, ctx) => {
+      if (!ctx.authUser) throw new GraphQLError("Unauthorized");
+
       const user = await ctx.users.findById(args.id);
 
       if (!user) {
-        throw new Error("User not found!");
+        throw new GraphQLError("User not found!");
       }
 
       return user;
@@ -23,7 +26,7 @@ export const usersResolvers: Resolvers = {
       const user = await ctx.users.find({ email: args.data!.email });
 
       if (!!user.length) {
-        throw new Error(`Email: ${args.data!.email} already in use`);
+        throw new GraphQLError(`Email: ${args.data!.email} already in use`);
       }
 
       newUser.save();

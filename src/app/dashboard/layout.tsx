@@ -1,6 +1,3 @@
-import "./globals.css";
-import { WagmiConfig } from "wagmi";
-
 export default function RootLayout({
   children,
 }: {
