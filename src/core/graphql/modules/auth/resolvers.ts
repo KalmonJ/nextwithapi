@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import cookie from "cookie";
 import { Resolvers } from "__generated__/resolvers-types";
-import { GraphQLError } from "graphql";
 
 export const loginResolvers: Resolvers = {
   Query: {
@@ -34,7 +33,7 @@ export const loginResolvers: Resolvers = {
         return { token };
       }
 
-      throw new GraphQLError("email or password invalid!");
+      throw new Error("email or password invalid!");
     },
 
     getSession: (_, __, ctx) => {

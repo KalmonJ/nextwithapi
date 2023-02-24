@@ -7,9 +7,29 @@ const Schema = new mongoose.Schema(
       required: true,
     },
 
+    stock: {
+      type: Number,
+      required: true,
+    },
+
+    likes: {
+      type: Number,
+    },
+
+    discountPercentage: {
+      type: Number,
+    },
+
+    salePrice: {
+      type: Number,
+    },
+
+    availability: {
+      type: Boolean,
+    },
+
     image: {
       type: String,
-      required: true,
     },
 
     description: {
@@ -26,6 +46,23 @@ const Schema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+
+    salesCount: {
+      type: Number,
+    },
+
+    publishedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
+
+    productReviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Reviews",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -5,6 +5,21 @@ type Product {
   image: String!
   category: String!
   price: Float!
+  availability: Boolean!
+  stock: Int!
+  publishedBy: User!
+  salePrice: String!
+  productReviews: [ProductReview!]!
+  descountPercentage: Int!
+  salesCount: Int
+}
+
+type ProductReview {
+  productId: ID!
+  likes: Int!
+  classifications: Int!
+  comment: String!
+  author: User!
 }
 
 type Query {
@@ -21,7 +36,9 @@ type Mutation {
 input inputProduct {
   name: String!
   description: String!
-  image: String!
+  image: String
   category: String!
   price: Float!
+  publishedBy: String!
+  stock: Int!
 }
