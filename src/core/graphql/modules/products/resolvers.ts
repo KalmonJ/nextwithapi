@@ -1,5 +1,6 @@
-import { Resolvers } from "__generated__/resolvers-types";
+import { ProductReview, Resolvers } from "__generated__/resolvers-types";
 import { GraphQLError } from "graphql";
+import mongoose from "mongoose";
 
 export const productResolvers: Resolvers = {
   Query: {
@@ -12,12 +13,16 @@ export const productResolvers: Resolvers = {
   },
 
   Mutation: {
-    createReview: (_, args, ctx) => {
+    createReview: async (_, args, ctx) => {
       if (!ctx.authUser) throw new GraphQLError("Unauthorized");
+      const review: mongoose.Document<ProductReview> = new ctx.reviews(
+        args.data
+      );
+      await review.save();
 
-      const review = new ctx.reviews(args.data);
-      review.save();
-      return review;
+      return (await ctx.reviews
+        .findById(review.id)
+        .populate("author")) as ProductReview;
     },
 
     deleteProduct: async (_, args, ctx) => {
