@@ -31,13 +31,18 @@ export type Login = {
 export type Mutation = {
   __typename?: "Mutation";
   createProduct: Product;
+  createReview: ProductReview;
   createUser?: Maybe<User>;
   deleteProduct: Scalars["Boolean"];
   updateProduct: Product;
 };
 
 export type MutationCreateProductArgs = {
-  data?: InputMaybe<InputProduct>;
+  data: InputProduct;
+};
+
+export type MutationCreateReviewArgs = {
+  data: ProductReview;
 };
 
 export type MutationCreateUserArgs = {
@@ -49,17 +54,34 @@ export type MutationDeleteProductArgs = {
 };
 
 export type MutationUpdateProductArgs = {
+  data: InputProduct;
   id: Scalars["String"];
 };
 
 export type Product = {
   __typename?: "Product";
+  availability: Scalars["Boolean"];
   category: Scalars["String"];
+  descountPercentage: Scalars["Int"];
   description: Scalars["String"];
   id: Scalars["ID"];
   image: Scalars["String"];
   name: Scalars["String"];
   price: Scalars["Float"];
+  publishedBy: User;
+  reviews: Array<ProductReview>;
+  salePrice: Scalars["String"];
+  salesCount?: Maybe<Scalars["Int"]>;
+  stock: Scalars["Int"];
+};
+
+export type ProductReview = {
+  __typename?: "ProductReview";
+  author: User;
+  classifications: Scalars["Int"];
+  comment: Scalars["String"];
+  likes: Scalars["Int"];
+  productId: Scalars["ID"];
 };
 
 export type Query = {
@@ -121,9 +143,23 @@ export type InputLogin = {
 export type InputProduct = {
   category: Scalars["String"];
   description: Scalars["String"];
+  image?: InputMaybe<Scalars["String"]>;
+  name: Scalars["String"];
+  price: Scalars["Float"];
+  publishedBy: Scalars["String"];
+  stock: Scalars["Int"];
+};
+
+export type InputUpdateProduct = {
+  availability?: InputMaybe<Scalars["Boolean"]>;
+  category: Scalars["String"];
+  descountPercentage?: InputMaybe<Scalars["Int"]>;
   image: Scalars["String"];
   name: Scalars["String"];
   price: Scalars["Float"];
+  salePrice?: InputMaybe<Scalars["Float"]>;
+  salesCount?: InputMaybe<Scalars["Int"]>;
+  stock: Scalars["Int"];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -243,6 +279,7 @@ export type ResolversTypes = ResolversObject<{
   Login: ResolverTypeWrapper<Login>;
   Mutation: ResolverTypeWrapper<{}>;
   Product: ResolverTypeWrapper<Product>;
+  ProductReview: ResolverTypeWrapper<ProductReview>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   User: ResolverTypeWrapper<User>;
@@ -250,6 +287,7 @@ export type ResolversTypes = ResolversObject<{
   inputGetSession: InputGetSession;
   inputLogin: InputLogin;
   inputProduct: InputProduct;
+  inputUpdateProduct: InputUpdateProduct;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -261,6 +299,7 @@ export type ResolversParentTypes = ResolversObject<{
   Login: Login;
   Mutation: {};
   Product: Product;
+  ProductReview: ProductReview;
   Query: {};
   String: Scalars["String"];
   User: User;
@@ -268,6 +307,7 @@ export type ResolversParentTypes = ResolversObject<{
   inputGetSession: InputGetSession;
   inputLogin: InputLogin;
   inputProduct: InputProduct;
+  inputUpdateProduct: InputUpdateProduct;
 }>;
 
 export type LoginResolvers<
@@ -286,7 +326,13 @@ export type MutationResolvers<
     ResolversTypes["Product"],
     ParentType,
     ContextType,
-    Partial<MutationCreateProductArgs>
+    RequireFields<MutationCreateProductArgs, "data">
+  >;
+  createReview?: Resolver<
+    ResolversTypes["ProductReview"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateReviewArgs, "data">
   >;
   createUser?: Resolver<
     Maybe<ResolversTypes["User"]>,
@@ -304,7 +350,7 @@ export type MutationResolvers<
     ResolversTypes["Product"],
     ParentType,
     ContextType,
-    RequireFields<MutationUpdateProductArgs, "id">
+    RequireFields<MutationUpdateProductArgs, "data" | "id">
   >;
 }>;
 
@@ -312,12 +358,35 @@ export type ProductResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Product"] = ResolversParentTypes["Product"]
 > = ResolversObject<{
+  availability?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   category?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  descountPercentage?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   price?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  publishedBy?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  reviews?: Resolver<
+    Array<ResolversTypes["ProductReview"]>,
+    ParentType,
+    ContextType
+  >;
+  salePrice?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  salesCount?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  stock?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProductReviewResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes["ProductReview"] = ResolversParentTypes["ProductReview"]
+> = ResolversObject<{
+  author?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  classifications?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  comment?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  likes?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  productId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -378,6 +447,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Login?: LoginResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
+  ProductReview?: ProductReviewResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;

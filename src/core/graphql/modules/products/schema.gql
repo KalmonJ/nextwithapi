@@ -9,7 +9,7 @@ type Product {
   stock: Int!
   publishedBy: User!
   salePrice: String!
-  productReviews: [ProductReview!]!
+  reviews: [ProductReview!]!
   descountPercentage: Int!
   salesCount: Int
 }
@@ -28,9 +28,22 @@ type Query {
 }
 
 type Mutation {
-  createProduct(data: inputProduct): Product!
-  updateProduct(id: String!): Product!
+  createProduct(data: inputProduct!): Product!
+  updateProduct(id: String!, data: inputProduct!): Product!
+  createReview(data: ProductReview!): ProductReview!
   deleteProduct(id: String!): Boolean!
+}
+
+input inputUpdateProduct {
+  name: String!
+  image: String!
+  category: String!
+  price: Float!
+  stock: Int!
+  availability: Boolean
+  salePrice: Float
+  salesCount: Int
+  descountPercentage: Int
 }
 
 input inputProduct {

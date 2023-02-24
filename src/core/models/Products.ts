@@ -57,7 +57,7 @@ const Schema = new mongoose.Schema(
       required: true,
     },
 
-    productReviews: [
+    reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Reviews",
