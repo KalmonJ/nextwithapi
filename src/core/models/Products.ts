@@ -16,6 +16,11 @@ const Schema = new mongoose.Schema(
       type: Number,
     },
 
+    emphasis: {
+      type: Boolean,
+      required: false,
+    },
+
     discountPercentage: {
       type: Number,
     },
@@ -28,9 +33,13 @@ const Schema = new mongoose.Schema(
       type: Boolean,
     },
 
-    image: {
-      type: String,
-    },
+    images: [
+      {
+        desktop: { type: String },
+        tablet: { type: String },
+        mobile: { type: String },
+      },
+    ],
 
     description: {
       type: String,

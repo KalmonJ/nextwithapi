@@ -1,4 +1,8 @@
-import { ProductReview, Resolvers } from "__generated__/resolvers-types";
+import {
+  Product,
+  ProductReview,
+  Resolvers,
+} from "__generated__/resolvers-types";
 import { GraphQLError } from "graphql";
 import mongoose from "mongoose";
 
@@ -27,7 +31,7 @@ export const productResolvers: Resolvers = {
 
     deleteProduct: async (_, args, ctx) => {
       if (!ctx.authUser) throw new GraphQLError("Unauthorized");
-      return !!ctx.products.findByIdAndRemove(args.id);
+      return !!(await ctx.products.findByIdAndRemove(args.id));
     },
 
     updateProduct: async (_, args, ctx) => {
@@ -38,11 +42,17 @@ export const productResolvers: Resolvers = {
       return updatedProduct;
     },
 
-    createProduct: (_, args, ctx) => {
+    createProduct: async (_, args, ctx) => {
       if (!ctx.authUser) throw new GraphQLError("Unauthorized");
-      const product = new ctx.products(args.data);
-      product.save();
-      return product;
+      const product: mongoose.Document<Product> = new ctx.products(args.data);
+      await product.save();
+
+      console.log(product, "produto");
+
+      return (await ctx.products
+        .findById(product.id)
+        .populate("reviews")
+        .populate("publishedBy")) as Product;
     },
   },
 };

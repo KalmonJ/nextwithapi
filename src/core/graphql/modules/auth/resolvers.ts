@@ -1,12 +1,16 @@
+import { Resolvers } from "__generated__/resolvers-types";
 import bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import cookie from "cookie";
-import { Resolvers } from "__generated__/resolvers-types";
+import { GraphQLError } from "graphql";
 
 export const loginResolvers: Resolvers = {
   Query: {
     login: async (_, args, ctx) => {
       const [user] = await ctx.users.find({ email: args.data!.email });
+
+      if (!user) throw new GraphQLError("User not found!");
+
       const match = await bcrypt.compare(args.data!.password, user.password);
       if (match) {
         const token = jwt.sign(
