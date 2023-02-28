@@ -8,11 +8,13 @@ import resolvers from "core/graphql/modules/resolvers";
 import Users from "core/models/Users";
 import Products from "core/models/Products";
 import Reviews from "core/models/Reviews";
+import Carts from "core/models/Carts";
 
 export type Context = {
   users: typeof Users;
   products: typeof Products;
   reviews: typeof Reviews;
+  carts: typeof Carts;
   authUser?: any;
   res: NextApiResponse;
 };
@@ -39,10 +41,17 @@ export default startServerAndCreateNextHandler(apolloServer, {
         products: Products,
         authUser: data,
         reviews: Reviews,
+        carts: Carts,
         res,
       };
     } catch (error) {
-      return { users: Users, products: Products, res, reviews: Reviews };
+      return {
+        users: Users,
+        products: Products,
+        res,
+        reviews: Reviews,
+        carts: Carts,
+      };
     }
   },
 });

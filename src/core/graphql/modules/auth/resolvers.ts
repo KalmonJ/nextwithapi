@@ -3,11 +3,12 @@ import bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import cookie from "cookie";
 import { GraphQLError } from "graphql";
+import { getByEmail } from "../users/usersResolvers";
 
 export const loginResolvers: Resolvers = {
   Query: {
     login: async (_, args, ctx) => {
-      const [user] = await ctx.users.find({ email: args.data!.email });
+      const user = await getByEmail(args.data!.email, ctx.users);
 
       if (!user) throw new GraphQLError("User not found!");
 

@@ -23,6 +23,15 @@ export type Scalars = {
   Float: number;
 };
 
+export type Cart = {
+  __typename?: "Cart";
+  id: Scalars["ID"];
+  owner: User;
+  product: Scalars["String"];
+  quantity: Scalars["Int"];
+  total: Scalars["Float"];
+};
+
 export type Login = {
   __typename?: "Login";
   token: Scalars["String"];
@@ -30,6 +39,7 @@ export type Login = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  createCart: Cart;
   createProduct: Product;
   createReview: ProductReview;
   createUser?: Maybe<User>;
@@ -37,12 +47,16 @@ export type Mutation = {
   updateProduct: Product;
 };
 
+export type MutationCreateCartArgs = {
+  data?: InputMaybe<InputCart>;
+};
+
 export type MutationCreateProductArgs = {
   data: InputProduct;
 };
 
 export type MutationCreateReviewArgs = {
-  data: ProductReview;
+  data: InputProductReview;
 };
 
 export type MutationCreateUserArgs = {
@@ -65,7 +79,7 @@ export type Product = {
   descountPercentage: Scalars["Int"];
   description: Scalars["String"];
   id: Scalars["ID"];
-  image: Scalars["String"];
+  images: Array<ProductImages>;
   name: Scalars["String"];
   price: Scalars["Float"];
   publishedBy: User;
@@ -73,6 +87,13 @@ export type Product = {
   salePrice: Scalars["String"];
   salesCount?: Maybe<Scalars["Int"]>;
   stock: Scalars["Int"];
+};
+
+export type ProductImages = {
+  __typename?: "ProductImages";
+  desktop: Scalars["String"];
+  mobile?: Maybe<Scalars["String"]>;
+  tablet?: Maybe<Scalars["String"]>;
 };
 
 export type ProductReview = {
@@ -86,12 +107,17 @@ export type ProductReview = {
 
 export type Query = {
   __typename?: "Query";
+  getCart: Cart;
   getProduct: Product;
   getSession: User;
   getUser: User;
   login: Login;
   products: Array<Product>;
   users: Array<User>;
+};
+
+export type QueryGetCartArgs = {
+  id?: InputMaybe<Scalars["String"]>;
 };
 
 export type QueryGetProductArgs = {
@@ -117,6 +143,7 @@ export type QueryProductsArgs = {
 
 export type User = {
   __typename?: "User";
+  cart: Array<Cart>;
   email: Scalars["String"];
   id: Scalars["ID"];
   password: Scalars["String"];
@@ -131,8 +158,21 @@ export type UserInput = {
   username: Scalars["String"];
 };
 
+export type InputCart = {
+  owner: Scalars["String"];
+  product: Scalars["String"];
+  quantity: Scalars["Int"];
+  total: Scalars["Float"];
+};
+
 export type InputGetSession = {
   token: Scalars["String"];
+};
+
+export type InputImages = {
+  desktop: Scalars["String"];
+  mobile?: InputMaybe<Scalars["String"]>;
+  tablet?: InputMaybe<Scalars["String"]>;
 };
 
 export type InputLogin = {
@@ -143,18 +183,26 @@ export type InputLogin = {
 export type InputProduct = {
   category: Scalars["String"];
   description: Scalars["String"];
-  image?: InputMaybe<Scalars["String"]>;
+  images: Array<InputImages>;
   name: Scalars["String"];
   price: Scalars["Float"];
   publishedBy: Scalars["String"];
   stock: Scalars["Int"];
 };
 
+export type InputProductReview = {
+  author: Scalars["String"];
+  classifications: Scalars["Int"];
+  comment: Scalars["String"];
+  likes: Scalars["Int"];
+  productId: Scalars["String"];
+};
+
 export type InputUpdateProduct = {
   availability?: InputMaybe<Scalars["Boolean"]>;
   category: Scalars["String"];
   descountPercentage?: InputMaybe<Scalars["Int"]>;
-  image: Scalars["String"];
+  images: Array<InputMaybe<InputImages>>;
   name: Scalars["String"];
   price: Scalars["Float"];
   salePrice?: InputMaybe<Scalars["Float"]>;
@@ -273,41 +321,63 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Cart: ResolverTypeWrapper<Cart>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Login: ResolverTypeWrapper<Login>;
   Mutation: ResolverTypeWrapper<{}>;
   Product: ResolverTypeWrapper<Product>;
+  ProductImages: ResolverTypeWrapper<ProductImages>;
   ProductReview: ResolverTypeWrapper<ProductReview>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   User: ResolverTypeWrapper<User>;
   UserInput: UserInput;
+  inputCart: InputCart;
   inputGetSession: InputGetSession;
+  inputImages: InputImages;
   inputLogin: InputLogin;
   inputProduct: InputProduct;
+  inputProductReview: InputProductReview;
   inputUpdateProduct: InputUpdateProduct;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"];
+  Cart: Cart;
   Float: Scalars["Float"];
   ID: Scalars["ID"];
   Int: Scalars["Int"];
   Login: Login;
   Mutation: {};
   Product: Product;
+  ProductImages: ProductImages;
   ProductReview: ProductReview;
   Query: {};
   String: Scalars["String"];
   User: User;
   UserInput: UserInput;
+  inputCart: InputCart;
   inputGetSession: InputGetSession;
+  inputImages: InputImages;
   inputLogin: InputLogin;
   inputProduct: InputProduct;
+  inputProductReview: InputProductReview;
   inputUpdateProduct: InputUpdateProduct;
+}>;
+
+export type CartResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes["Cart"] = ResolversParentTypes["Cart"]
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  product?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoginResolvers<
@@ -322,6 +392,12 @@ export type MutationResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
 > = ResolversObject<{
+  createCart?: Resolver<
+    ResolversTypes["Cart"],
+    ParentType,
+    ContextType,
+    Partial<MutationCreateCartArgs>
+  >;
   createProduct?: Resolver<
     ResolversTypes["Product"],
     ParentType,
@@ -363,7 +439,11 @@ export type ProductResolvers<
   descountPercentage?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  images?: Resolver<
+    Array<ResolversTypes["ProductImages"]>,
+    ParentType,
+    ContextType
+  >;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   price?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   publishedBy?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
@@ -375,6 +455,16 @@ export type ProductResolvers<
   salePrice?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   salesCount?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   stock?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProductImagesResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes["ProductImages"] = ResolversParentTypes["ProductImages"]
+> = ResolversObject<{
+  desktop?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  mobile?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  tablet?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -394,6 +484,12 @@ export type QueryResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = ResolversObject<{
+  getCart?: Resolver<
+    ResolversTypes["Cart"],
+    ParentType,
+    ContextType,
+    Partial<QueryGetCartArgs>
+  >;
   getProduct?: Resolver<
     ResolversTypes["Product"],
     ParentType,
@@ -431,6 +527,7 @@ export type UserResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]
 > = ResolversObject<{
+  cart?: Resolver<Array<ResolversTypes["Cart"]>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   password?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -444,9 +541,11 @@ export type UserResolvers<
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Cart?: CartResolvers<ContextType>;
   Login?: LoginResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
+  ProductImages?: ProductImagesResolvers<ContextType>;
   ProductReview?: ProductReviewResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

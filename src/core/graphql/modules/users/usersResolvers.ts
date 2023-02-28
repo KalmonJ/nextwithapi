@@ -1,5 +1,7 @@
+import Products from "core/models/Products";
+import Users from "core/models/Users";
 import { GraphQLError } from "graphql";
-import { Resolvers } from "__generated__/resolvers-types";
+import { Resolvers, User } from "__generated__/resolvers-types";
 
 export const usersResolvers: Resolvers = {
   Query: {
@@ -33,4 +35,13 @@ export const usersResolvers: Resolvers = {
       return newUser;
     },
   },
+};
+
+export const getByEmail = async (
+  email: string,
+  users: typeof Users
+): Promise<User> => {
+  const [user] = await users.find({ email }).populate("cart");
+  if (!user) throw new GraphQLError("User not found!");
+  return user as any;
 };

@@ -47,8 +47,6 @@ export const productResolvers: Resolvers = {
       const product: mongoose.Document<Product> = new ctx.products(args.data);
       await product.save();
 
-      console.log(product, "produto");
-
       return (await ctx.products
         .findById(product.id)
         .populate("reviews")

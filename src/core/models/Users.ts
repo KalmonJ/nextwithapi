@@ -18,6 +18,11 @@ const Schema = new mongoose.Schema(
       required: true,
     },
 
+    cart: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Carts",
+      required: true,
+    },
     profileImage: {
       type: String,
     },

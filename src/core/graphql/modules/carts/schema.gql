@@ -1,0 +1,22 @@
+type Cart {
+  id: ID!
+  quantity: Int!
+  product: Product!
+  owner: User!
+  total: Float!
+}
+
+type Query {
+  getCart(id: String): Cart!
+}
+
+type Mutation {
+  createCart(data: inputCart): Cart!
+}
+
+input inputCart {
+  quantity: Int!
+  product: String!
+  owner: String!
+  total: Float!
+}
