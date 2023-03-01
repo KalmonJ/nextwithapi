@@ -1,21 +1,21 @@
-import Products from "core/models/Products";
 import Users from "core/models/Users";
 import { GraphQLError } from "graphql";
 import { Resolvers, User } from "__generated__/resolvers-types";
+import { ErrorMessages } from "../carts/resolvers";
 
 export const usersResolvers: Resolvers = {
   Query: {
     users: async (_, __, ctx) => {
-      if (!ctx.authUser) throw new GraphQLError("Unauthorized");
+      if (!ctx.authUser) throw new GraphQLError(ErrorMessages.UNAUTHORIZED);
       return await ctx.users.find();
     },
     getUser: async (_, args, ctx) => {
-      if (!ctx.authUser) throw new GraphQLError("Unauthorized");
+      if (!ctx.authUser) throw new GraphQLError(ErrorMessages.UNAUTHORIZED);
 
       const user = await ctx.users.findById(args.id);
 
       if (!user) {
-        throw new GraphQLError("User not found!");
+        throw new GraphQLError(ErrorMessages.USERNOTFOUND);
       }
 
       return user;

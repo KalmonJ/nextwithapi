@@ -5,6 +5,7 @@ import {
 } from "__generated__/resolvers-types";
 import { GraphQLError } from "graphql";
 import mongoose from "mongoose";
+import { ErrorMessages } from "../carts/resolvers";
 
 export const productResolvers: Resolvers = {
   Query: {
@@ -18,7 +19,7 @@ export const productResolvers: Resolvers = {
 
   Mutation: {
     createReview: async (_, args, ctx) => {
-      if (!ctx.authUser) throw new GraphQLError("Unauthorized");
+      if (!ctx.authUser) throw new GraphQLError(ErrorMessages.UNAUTHORIZED);
       const review: mongoose.Document<ProductReview> = new ctx.reviews(
         args.data
       );
@@ -30,7 +31,7 @@ export const productResolvers: Resolvers = {
     },
 
     deleteProduct: async (_, args, ctx) => {
-      if (!ctx.authUser) throw new GraphQLError("Unauthorized");
+      if (!ctx.authUser) throw new GraphQLError(ErrorMessages.UNAUTHORIZED);
       return !!(await ctx.products.findByIdAndRemove(args.id));
     },
 
@@ -43,7 +44,7 @@ export const productResolvers: Resolvers = {
     },
 
     createProduct: async (_, args, ctx) => {
-      if (!ctx.authUser) throw new GraphQLError("Unauthorized");
+      if (!ctx.authUser) throw new GraphQLError(ErrorMessages.UNAUTHORIZED);
       const product: mongoose.Document<Product> = new ctx.products(args.data);
       await product.save();
 

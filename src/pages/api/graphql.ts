@@ -9,6 +9,7 @@ import Users from "core/models/Users";
 import Products from "core/models/Products";
 import Reviews from "core/models/Reviews";
 import Carts from "core/models/Carts";
+import { GraphQLError } from "graphql";
 
 export type Context = {
   users: typeof Users;
