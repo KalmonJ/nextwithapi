@@ -12,6 +12,7 @@ type Product {
   reviews: [ProductReview!]!
   descountPercentage: Int!
   salesCount: Int
+  emphasis: Boolean
 }
 
 type ProductReview {

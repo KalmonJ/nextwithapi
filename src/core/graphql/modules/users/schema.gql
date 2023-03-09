@@ -1,14 +1,13 @@
 type User {
   id: ID!
   username: String!
-  password: String!
   profileImage: String
-  cart: [Cart!]!
+  cart: Cart!
   email: String!
 }
 
 type Mutation {
-  createUser(data: UserInput): User
+  createUser(data: UserInput): User!
 }
 
 input UserInput {

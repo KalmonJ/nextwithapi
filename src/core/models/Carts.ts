@@ -4,7 +4,6 @@ const Schema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Products",
-    required: true,
   },
 
   owner: {
@@ -14,12 +13,10 @@ const Schema = new mongoose.Schema({
   },
   quantity: {
     type: Number,
-    required: true,
   },
 
   total: {
     type: Number,
-    required: true,
   },
 });
 

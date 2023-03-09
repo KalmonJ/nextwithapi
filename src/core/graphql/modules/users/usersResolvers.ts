@@ -1,6 +1,6 @@
 import Users from "core/models/Users";
 import { GraphQLError } from "graphql";
-import { Resolvers, User } from "__generated__/resolvers-types";
+import { Cart, Resolvers, User } from "__generated__/resolvers-types";
 import { ErrorMessages } from "../carts/resolvers";
 
 export const usersResolvers: Resolvers = {
@@ -12,7 +12,7 @@ export const usersResolvers: Resolvers = {
     getUser: async (_, args, ctx) => {
       if (!ctx.authUser) throw new GraphQLError(ErrorMessages.UNAUTHORIZED);
 
-      const user = await ctx.users.findById(args.id);
+      const user = await ctx.users.findById(args.id).populate("cart");
 
       if (!user) {
         throw new GraphQLError(ErrorMessages.USERNOTFOUND);
@@ -27,12 +27,20 @@ export const usersResolvers: Resolvers = {
       const newUser = new ctx.users(args.data);
       const user = await ctx.users.find({ email: args.data!.email });
 
+      const cart = new ctx.carts({ owner: newUser.id, total: 0 });
+      await cart.save();
+
       if (!!user.length) {
         throw new GraphQLError(`Email: ${args.data!.email} already in use`);
       }
 
-      newUser.save();
-      return newUser;
+      newUser.cart = cart._id;
+      const userCreated = await newUser.save();
+      const populatedUser = await ctx.users
+        .findById(userCreated._id)
+        .populate("cart");
+
+      return populatedUser;
     },
   },
 };

@@ -1,10 +1,9 @@
-import { Button } from "components/Button";
-import { Header } from "components/Header";
+import { Hero } from "components/Hero";
 
 export const Home = () => {
   return (
     <main>
-      <Header></Header>
+      <Hero />
     </main>
   );
 };

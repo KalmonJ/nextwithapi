@@ -9,8 +9,15 @@ import { ErrorMessages } from "../carts/resolvers";
 
 export const productResolvers: Resolvers = {
   Query: {
-    products: async (_, __, ctx) =>
-      await ctx.products.find().populate("publishedBy").populate("reviews"),
+    products: async (_, __, ctx) => {
+      const products = await ctx.products
+        .find()
+        .populate("publishedBy")
+        .populate("reviews")
+        .sort({ name: -1 });
+
+      return products as Product[];
+    },
     getProduct: async (_, args, ctx) => {
       const product = await ctx.products.findById(args.id);
       return product;

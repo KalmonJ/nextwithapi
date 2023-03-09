@@ -1,7 +1,7 @@
 type Cart {
   id: ID!
   quantity: Int!
-  product: Product!
+  product: [Product]!
   owner: User!
   total: Float!
 }
@@ -15,8 +15,8 @@ type Mutation {
 }
 
 input inputCart {
-  quantity: Int!
-  product: String!
+  quantity: Int
+  product: String
   owner: String!
-  total: Float!
+  total: Float
 }

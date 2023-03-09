@@ -21,8 +21,8 @@ const Schema = new mongoose.Schema(
     cart: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Carts",
-      required: true,
     },
+
     profileImage: {
       type: String,
     },

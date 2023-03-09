@@ -21,7 +21,6 @@ export const cartResolvers: Resolvers = {
       if (!("product" in cart) || !("owner" in cart)) {
         throw new GraphQLError(ErrorMessages.CART);
       }
-
       return await (await cart.save()).populate("product owner");
     },
   },
