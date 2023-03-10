@@ -1,10 +1,14 @@
 "use client";
 
+import { Product } from "__generated__/resolvers-types";
 import { Button } from "./Button";
 import { Carousel } from "./Carousel";
 import { Header } from "./Header";
 
-export const Hero = () => {
+export interface Products {
+  products: Product[];
+}
+export const Hero = (props: Products) => {
   return (
     <>
       <Header />
@@ -34,29 +38,7 @@ export const Hero = () => {
             height: 900,
             autoplay: true,
           }}
-          data={[
-            {
-              id: "item",
-              image: null,
-              name: "XX99 MARK II HEADPHONES",
-              description:
-                "Experience natural, lifelike audio and exceptional build quality made for the passionate music enthusiast.",
-            },
-            {
-              id: "item",
-              image: null,
-              name: "XX99 MARK II HEADPHONES",
-              description:
-                "Experience natural, lifelike audio and exceptional build quality made for the passionate music enthusiast.",
-            },
-            {
-              id: "item",
-              image: null,
-              name: "XX99 MARK II HEADPHONES",
-              description:
-                "Experience natural, lifelike audio and exceptional build quality made for the passionate music enthusiast.",
-            },
-          ]}
+          data={props.products as Product[]}
         />
       </section>
     </>

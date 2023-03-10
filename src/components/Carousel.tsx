@@ -11,6 +11,8 @@ export interface CarouselProps<T> {
 }
 
 export const Carousel = <T extends any>(props: CarouselProps<T>) => {
+  console.log(props.data);
+
   return (
     <Swiper {...props.options}>
       {props.data.map((item, index) => (

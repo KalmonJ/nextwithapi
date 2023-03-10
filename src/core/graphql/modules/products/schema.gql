@@ -30,7 +30,7 @@ type ProductImages {
 }
 
 type Query {
-  products(offset: Int, limit: Int): [Product!]!
+  products: [Product!]!
   getProduct(id: String!): Product!
 }
 
