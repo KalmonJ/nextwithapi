@@ -1,7 +1,11 @@
 import { Cart, Logo } from "./icons";
 import { FaUser } from "react-icons/fa";
+import { Modal, ModalContent } from "./Modal";
+import { useState } from "react";
 
 export const Header = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <header className="flex justify-around bg-black">
       <div className="flex justify-between max-w-[1110px] w-full pb-9 pt-9 border-b border-solid border-white border-opacity-50">
@@ -26,9 +30,27 @@ export const Header = () => {
           <div className="cursor-pointer">
             <Cart />
           </div>
-          <FaUser color="white" className="cursor-pointer" fontSize={18} />
+          <FaUser
+            color="white"
+            className="cursor-pointer"
+            fontSize={18}
+            onClick={() => setOpen(true)}
+          />
         </div>
       </div>
+
+      {open && (
+        <Modal open={open} setIsOpen={setOpen}>
+          <ModalContent>
+            <div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              hic reprehenderit facere dolore soluta, quae quo. Autem amet culpa
+              ullam accusamus, voluptate soluta, repellendus pariatur excepturi
+              modi, dignissimos distinctio eum.
+            </div>
+          </ModalContent>
+        </Modal>
+      )}
     </header>
   );
 };

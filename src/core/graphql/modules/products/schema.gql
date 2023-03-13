@@ -31,6 +31,7 @@ type ProductImages {
 
 type Query {
   products: [Product!]!
+  featuredProducts: [Product!]!
   getProduct(id: String!): Product!
 }
 
