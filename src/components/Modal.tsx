@@ -17,7 +17,7 @@ export const Modal = (props: ModalProps) => {
   return (
     <div className="fixed w-full h-full z-50">
       <div
-        onClick={() => console.log("clicou fora")}
+        onClick={() => props.setIsOpen(!props.open)}
         className="z-[9999px] bg-[rgba(0,0,0,0.4)] backdrop-blur w-full h-full"
       />
       {Children.map(props.children, (child) => {
