@@ -2,6 +2,7 @@ import { Cart, Logo } from "./icons";
 import { FaUser } from "react-icons/fa";
 import { Modal, ModalContent } from "./Modal";
 import { useState } from "react";
+import { LoginForm } from "./LoginForm";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
@@ -41,13 +42,8 @@ export const Header = () => {
 
       {open && (
         <Modal open={open} setIsOpen={setOpen}>
-          <ModalContent>
-            <div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
-              hic reprehenderit facere dolore soluta, quae quo. Autem amet culpa
-              ullam accusamus, voluptate soluta, repellendus pariatur excepturi
-              modi, dignissimos distinctio eum.
-            </div>
+          <ModalContent classNames="">
+            <LoginForm />
           </ModalContent>
         </Modal>
       )}

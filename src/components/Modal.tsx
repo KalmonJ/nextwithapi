@@ -24,7 +24,6 @@ export const Modal = (props: ModalProps) => {
         if (!isValidElement(child)) {
           return;
         }
-
         return cloneElement(child as any, { ...props });
       })}
     </div>

@@ -2,8 +2,10 @@ import { ButtonHTMLAttributes } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import clsx from "clsx";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {
   variant: "contained" | "outline" | "link";
+  classnames?: string;
 }
 
 export const Button = ({ variant, ...props }: ButtonProps) => {
@@ -17,7 +19,7 @@ export const Button = ({ variant, ...props }: ButtonProps) => {
 
   return (
     <button
-      className={clsx(buttonVarints[variant], props.className)}
+      className={clsx(buttonVarints[variant], props.classnames)}
       {...props}
     >
       {props.children} {variant === "link" && <FaChevronRight />}
